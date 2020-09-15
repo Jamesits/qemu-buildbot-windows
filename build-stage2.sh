@@ -19,6 +19,7 @@ TARGET_LIST="${TARGET_LIST:-${DEFAULT_TARGET_LIST}}"
 # prepare sources
 mkdir -p "${SOURCE_BASE_DIR}"
 pushd "${SOURCE_BASE_DIR}"
+rm -rf ./qemu
 
 git clone "${SOURCE_GIT_URL}" qemu
 pushd qemu
@@ -50,6 +51,7 @@ popd
 popd
 
 # build
+rm -rf "${BUILD_ARTIFACTS_DIR}"
 mkdir -p "${BUILD_ARTIFACTS_DIR}"
 pushd "${BUILD_ARTIFACTS_DIR}"
 
