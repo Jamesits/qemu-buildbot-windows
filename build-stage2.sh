@@ -15,13 +15,14 @@ CROSS_PREFIX="${CROSS_PREFIX:-x86_64-w64-mingw32-}"
 CROSS_SUFFIX="${CROSS_SUFFIX:-w64}" # w32 or w64 for Windows builds
 DATE=$(date +%Y%m%d)
 TARGET_LIST="${TARGET_LIST:-${DEFAULT_TARGET_LIST}}"
+MAKE_FLAGS="${MAKE_FLAGS:--j}" # note that -j might cause OOM
 
 # prepare sources
 mkdir -p "${SOURCE_BASE_DIR}"
 pushd "${SOURCE_BASE_DIR}"
 rm -rf ./qemu
 
-git clone "${SOURCE_GIT_URL}" qemu
+git clone "${SOURCE_GIT_URL}" qemu # the configure script will init the submodules, no need to do recursive here
 pushd qemu
 git checkout "${SOURCE_GIT_REF}"
 
@@ -62,7 +63,7 @@ ${SOURCE_BASE_DIR}/qemu/configure --cross-prefix="${CROSS_PREFIX}" \
     --enable-gtk --enable-sdl --enable-hax \
     --target-list="${TARGET_LIST}"
 
-make all -j V=1 CFLAGS="-Wno-redundant-decls"
+make all ${MAKE_FLAGS} V=1 CFLAGS="-Wno-redundant-decls"
 make installer INSTALLER="qemu-setup-${CROSS_SUFFIX}-${DATE}.exe" # SIGNCODE=signcode
 
 # end build

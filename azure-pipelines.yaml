@@ -26,11 +26,13 @@ jobs:
           SOURCE_GIT_REF: 'plct-nuclei'
           CROSS_PREFIX: 'i686-w64-mingw32-'
           CROSS_SUFFIX: "w32"
+          MAKE_FLAGS: "-j1"
         plct-nuclei-w64:
           SOURCE_GIT_URL: 'https://github.com/isrc-cas/plct-qemu'
           SOURCE_GIT_REF: 'plct-nuclei'
           CROSS_PREFIX: 'x86_64-w64-mingw32-'
           CROSS_SUFFIX: "w64"
+          MAKE_FLAGS: "-j1"
 
     steps:
     - bash: |
