@@ -1,6 +1,6 @@
 #!/bin/bash
 set -Eeuo pipefail
-set +x
+set -x
 
 cd "$( dirname "${BASH_SOURCE[0]}" )"
 export DEBIAN_FRONTEND="noninteractive"
