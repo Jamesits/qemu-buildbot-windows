@@ -6,6 +6,8 @@ cd "$( dirname "${BASH_SOURCE[0]}" )"
 export DEBIAN_FRONTEND="noninteractive"
 
 DEFAULT_TARGET_LIST="aarch64-softmmu,alpha-softmmu,arm-softmmu,cris-softmmu,hppa-softmmu,i386-softmmu,lm32-softmmu,m68k-softmmu,microblaze-softmmu,microblazeel-softmmu,mips-softmmu,mips64-softmmu,mips64el-softmmu,mipsel-softmmu,moxie-softmmu,nios2-softmmu,or1k-softmmu,ppc-softmmu,ppc64-softmmu,riscv32-softmmu,riscv64-softmmu,rx-softmmu,s390x-softmmu,sh4-softmmu,sh4eb-softmmu,sparc-softmmu,sparc64-softmmu,tricore-softmmu,unicore32-softmmu,x86_64-softmmu,xtensa-softmmu,xtensaeb-softmmu"
+# default DLLs list is extracted from the installer provided at https://qemu.weilnetz.de/w64/
+DEFAULT_DLL_LIST="iconv,libatk-1.0-0,libbz2-1,libcairo-2,libcairo-gobject-2,libcurl-4,libeay32,libepoxy-0,libexpat-1,libffi-6,libfontconfig-1,libfreetype-6,libgcc_s_sjlj-1,libgdk-3-0,libgdk_pixbuf-2.0-0,libgio-2.0-0,libglib-2.0-0,libgmodule-2.0-0,libgmp-10,libgnutls-30,libgobject-2.0-0,libgtk-3-0,libharfbuzz-0,libhogweed-4,libidn2-0,libintl-8,libjpeg-62,libjpeg-8,liblzo2-2,libncursesw6,libnettle-6,libnghttp2-14,libp11-kit-0,libpango-1.0-0,libpangocairo-1.0-0,libpangoft2-1.0-0,libpangowin32-1.0-0,libpcre-1,libpixman-1-0,libpng16-16,libssh2-1,libssp-0,libstdc++-6,libtasn1-6,libunistring-2,libusb-1.0,libusbredirparser-1,libwinpthread-1,SDL2,ssleay32,zlib1"
 
 SOURCE_BASE_DIR="${SOURCE_BASE_DIR:-${HOME}}"
 SOURCE_GIT_URL="${SOURCE_GIT_URL:-https://github.com/qemu/qemu}"
@@ -15,6 +17,7 @@ CROSS_PREFIX="${CROSS_PREFIX:-x86_64-w64-mingw32-}"
 CROSS_SUFFIX="${CROSS_SUFFIX:-w64}" # w32 or w64 for Windows builds
 DATE=$(date +%Y%m%d)
 TARGET_LIST="${TARGET_LIST:-${DEFAULT_TARGET_LIST}}"
+DLL_LIST="${DLL_LIST:-${DEFAULT_DLL_LIST}}"
 MAKE_FLAGS="${MAKE_FLAGS:--j}" # note that -j might cause OOM
 
 # prepare sources
@@ -27,24 +30,33 @@ pushd qemu
 git checkout "${SOURCE_GIT_REF}"
 
 # put Win32 and Win64 dlls
-DLL_DOWNLOAD_URL=""
 
-if [ "$CROSS_SUFFIX" = "w32" ]; then
-    DLL_DOWNLOAD_DIR="./dll/w32"
-    DLL_DOWNLOAD_URL="https://qemu.weilnetz.de/w32/old/dll/"
-    DLL_DOWNLOAD_CUT_DIRS="3"
-elif [ "$CROSS_SUFFIX" = "w64" ]; then
-    DLL_DOWNLOAD_DIR="./dll/w64"
-    DLL_DOWNLOAD_URL="https://qemu.weilnetz.de/w64/old/dll/"
-    DLL_DOWNLOAD_CUT_DIRS="3"
-fi
+# old approach: download from Internet
+# DLL_DOWNLOAD_URL=""
 
-if [ ! -z "${DLL_DOWNLOAD_URL}" ]; then
-    mkdir -p "${DLL_DOWNLOAD_DIR}"
-    pushd "${DLL_DOWNLOAD_DIR}"
-    wget --recursive --no-parent --no-host-directories --continue --cut-dirs ${DLL_DOWNLOAD_CUT_DIRS} --accept "*.dll" --reject "index.html*" --level 1 "${DLL_DOWNLOAD_URL}"
-    popd
-fi
+# if [ "$CROSS_SUFFIX" = "w32" ]; then
+#     DLL_DOWNLOAD_DIR="./dll/w32"
+#     DLL_DOWNLOAD_URL="https://qemu.weilnetz.de/w32/old/dll/"
+#     DLL_DOWNLOAD_CUT_DIRS="3"
+# elif [ "$CROSS_SUFFIX" = "w64" ]; then
+#     DLL_DOWNLOAD_DIR="./dll/w64"
+#     DLL_DOWNLOAD_URL="https://qemu.weilnetz.de/w64/old/dll/"
+#     DLL_DOWNLOAD_CUT_DIRS="3"
+# fi
+
+# if [ ! -z "${DLL_DOWNLOAD_URL}" ]; then
+#     mkdir -p "${DLL_DOWNLOAD_DIR}"
+#     pushd "${DLL_DOWNLOAD_DIR}"
+#     wget --recursive --no-parent --no-host-directories --continue --cut-dirs ${DLL_DOWNLOAD_CUT_DIRS} --accept "*.dll" --reject "index.html*" --level 1 "${DLL_DOWNLOAD_URL}"
+#     popd
+# fi
+
+# new approach: get from MingW packages
+mkdir -p ./dll/w32 ./dll/w64
+IFS="," for name in "${DLL_LIST}"; do
+    cp -v "/usr/i686-w64-mingw32/sys-root/mingw/bin/${name}.dll" "./dll/w32/"
+    cp -v "/usr/x86_64-w64-mingw32/sys-root/mingw/bin/${name}.dll" "./dll/w64/"
+done
 
 popd
 
