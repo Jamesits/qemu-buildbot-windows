@@ -1,0 +1,55 @@
+name: $(BUILD_TYPE)-$(Date:yyyyMMdd).$(Rev:r)
+
+trigger:
+  batch: true
+  branches:
+    include: [ "master" ]
+  paths:
+    exclude: [ "README.md" ]
+
+jobs:
+  - job: build
+    displayName: "build"
+    pool:
+      vmImage: "ubuntu-latest"
+    container: 
+      image: "debian:stretch"
+      options:  "--name ci-container -v /usr/bin/docker:/tmp/docker:ro"
+    workspace:
+      clean: all
+    timeoutInMinutes: 240
+
+    strategy:
+      matrix:
+        plct-nuclei-w32:
+          SOURCE_GIT_URL: 'https://github.com/isrc-cas/plct-qemu'
+          SOURCE_GIT_REF: 'plct-nuclei'
+          CROSS_PREFIX: 'i686-w64-mingw32-'
+          CROSS_SUFFIX: "w32"
+        plct-nuclei-w64:
+          SOURCE_GIT_URL: 'https://github.com/isrc-cas/plct-qemu'
+          SOURCE_GIT_REF: 'plct-nuclei'
+          CROSS_PREFIX: 'x86_64-w64-mingw32-'
+          CROSS_SUFFIX: "w64"
+
+    steps:
+    - bash: |
+        /tmp/docker exec -t -u 0 ci-container \
+        sh -c "apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confold" -y install sudo"
+      displayName: 'install sudo'
+
+    - bash: 'sudo -E bash ./build-stage1.sh'
+      displayName: 'prepare environment'
+
+    - bash: 'bash ./build-stage2.sh'
+      displayName: 'build'
+
+    - bash: |
+        cp -v /tmp/qemu-build/*.exe "${BUILD_ARTIFACTSTAGINGDIRECTORY}"
+        tar -cvzf "${BUILD_ARTIFACTSTAGINGDIRECTORY}/artifacts.tar.gz" /tmp/qemu-build
+      displayName: 'copy artifacts'
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'public artifacts'
+      inputs:
+        artifactName: 'qemu-build-$(CROSS_SUFFIX)'
