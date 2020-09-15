@@ -49,7 +49,7 @@ for name in ${DLL_LIST_GCC//,/ }; do
 done
 
 # dlls provided by gcc-mingw-w64-i686 only
-for name in ${DLL_LIST_GCC//,/ }; do
+for name in ${DLL_LIST_GCC_W32ONLY//,/ }; do
     cp -v "/usr/lib/gcc/i686-w64-mingw32/6.3-win32/${name}.dll" "./dll/w32/"
     cp -v "/usr/lib/gcc/i686-w64-mingw32/6.3-win32/${name}.dll" "./dll/w64/"
 done
