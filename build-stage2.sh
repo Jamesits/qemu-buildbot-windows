@@ -37,8 +37,8 @@ elif [ "$CROSS_SUFFIX" = "w64" ]; then
 fi
 
 if [ ! -z "${DLL_DOWNLOAD_URL}" ]; then
-    mkdir -p "${DLL_DOWNLOAD_URL}"
-    pushd "${DLL_DOWNLOAD_URL}"
+    mkdir -p "${DLL_DOWNLOAD_DIR}"
+    pushd "${DLL_DOWNLOAD_DIR}"
     wget --recursive --no-parent --reject "index.html*" "${DLL_DOWNLOAD_URL}"
     popd
 fi
