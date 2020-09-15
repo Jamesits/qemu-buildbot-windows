@@ -22,11 +22,11 @@ git checkout "${SOURCE_GIT_REF}"
 mkdir -p "${BUILD_ARTIFACTS_DIR}"
 pushd "${BUILD_ARTIFACTS_DIR}"
 
-${SOURCE_BASE_DIR}/configure --cross-prefix="${CROSS_PREFIX}" \
+${SOURCE_BASE_DIR}/qemu/configure --cross-prefix="${CROSS_PREFIX}" \
     --disable-werror --enable-trace-backends=simple --enable-debug \
     --enable-gnutls --enable-nettle --enable-curl --enable-vnc \
     --enable-bzip2 --enable-guest-agent --enable-docs \
     --enable-gtk --enable-sdl --enable-hax
 
 make all -j V=1 CFLAGS="-Wno-redundant-decls"
-make installer INSTALLER="qemu-${CROSS_SUFFIX}-setup-${DATE}.exe" # SIGNCODE=signcode
+make installer INSTALLER="qemu-setup-${CROSS_SUFFIX}-${DATE}.exe" # SIGNCODE=signcode

@@ -1,4 +1,4 @@
-name: $(BUILD_TYPE)-$(Date:yyyyMMdd).$(Rev:r)
+name: $(Date:yyyyMMdd).$(Rev:r)
 
 trigger:
   batch: true
@@ -38,14 +38,14 @@ jobs:
         sh -c "apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confold" -y install sudo"
       displayName: 'install sudo'
 
-    - bash: 'sudo -E bash ./build-stage1.sh'
+    - bash: 'sudo -EH bash ./build-stage1.sh'
       displayName: 'prepare environment'
 
     - bash: 'bash ./build-stage2.sh'
       displayName: 'build'
 
     - bash: |
-        cp -v /tmp/qemu-build/*.exe "${BUILD_ARTIFACTSTAGINGDIRECTORY}"
+        cp -v /tmp/qemu-build/qemu-setup-*.exe "${BUILD_ARTIFACTSTAGINGDIRECTORY}"
         tar -cvzf "${BUILD_ARTIFACTSTAGINGDIRECTORY}/artifacts.tar.gz" /tmp/qemu-build
       displayName: 'copy artifacts'
 
