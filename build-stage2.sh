@@ -31,15 +31,17 @@ DLL_DOWNLOAD_URL=""
 if [ "$CROSS_SUFFIX" = "w32" ]; then
     DLL_DOWNLOAD_DIR="./dll/w32"
     DLL_DOWNLOAD_URL="https://qemu.weilnetz.de/w32/old/dll/"
+    DLL_DOWNLOAD_CUT_DIRS="3"
 elif [ "$CROSS_SUFFIX" = "w64" ]; then
     DLL_DOWNLOAD_DIR="./dll/w64"
     DLL_DOWNLOAD_URL="https://qemu.weilnetz.de/w64/old/dll/"
+    DLL_DOWNLOAD_CUT_DIRS="3"
 fi
 
 if [ ! -z "${DLL_DOWNLOAD_URL}" ]; then
     mkdir -p "${DLL_DOWNLOAD_DIR}"
     pushd "${DLL_DOWNLOAD_DIR}"
-    wget --recursive --no-parent --reject "index.html*" "${DLL_DOWNLOAD_URL}"
+    wget --recursive --no-parent --no-host-directories --continue --cut-dirs ${DLL_DOWNLOAD_CUT_DIRS} --accept "*.dll" --reject "index.html*" --level 1 "${DLL_DOWNLOAD_URL}"
     popd
 fi
 
