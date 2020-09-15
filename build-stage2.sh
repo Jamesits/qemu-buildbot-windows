@@ -31,7 +31,7 @@ git checkout "${SOURCE_GIT_REF}"
 
 # collect Win32 and Win64 dlls
 mkdir -p ./dll/w32 ./dll/w64
-IFS="," for name in "${DLL_LIST}"; do
+for name in ${DLL_LIST//,/ }; do
     cp -v "/usr/i686-w64-mingw32/sys-root/mingw/bin/${name}.dll" "./dll/w32/"
     cp -v "/usr/x86_64-w64-mingw32/sys-root/mingw/bin/${name}.dll" "./dll/w64/"
 done
