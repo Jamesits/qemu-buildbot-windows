@@ -14,11 +14,11 @@ SOURCE_GIT_URL="${SOURCE_GIT_URL:-https://github.com/qemu/qemu}"
 SOURCE_GIT_REF="${SOURCE_GIT_REF:-master}"
 BUILD_ARTIFACTS_DIR="${BUILD_ARTIFACTS_DIR:-/tmp/qemu-build}"
 CROSS_PREFIX="${CROSS_PREFIX:-x86_64-w64-mingw32-}"
-CROSS_SUFFIX="${CROSS_SUFFIX:-w64}" # w32 or w64 for Windows builds
+CROSS_SUFFIX="${CROSS_SUFFIX:-w64}" # w32 or w64 for Windows builds, only affects setup executable name
 DATE=$(date +%Y%m%d)
 TARGET_LIST="${TARGET_LIST:-${DEFAULT_TARGET_LIST}}"
 DLL_LIST="${DLL_LIST:-${DEFAULT_DLL_LIST}}"
-MAKE_FLAGS="${MAKE_FLAGS:--j}" # note that -j might cause OOM
+MAKE_FLAGS="${MAKE_FLAGS:--j}" # note that -j might cause OOM (on a 32-core 128G server!)
 
 # prepare sources
 mkdir -p "${SOURCE_BASE_DIR}"
@@ -29,29 +29,7 @@ git clone "${SOURCE_GIT_URL}" qemu # the configure script will init the submodul
 pushd qemu
 git checkout "${SOURCE_GIT_REF}"
 
-# put Win32 and Win64 dlls
-
-# old approach: download from Internet
-# DLL_DOWNLOAD_URL=""
-
-# if [ "$CROSS_SUFFIX" = "w32" ]; then
-#     DLL_DOWNLOAD_DIR="./dll/w32"
-#     DLL_DOWNLOAD_URL="https://qemu.weilnetz.de/w32/old/dll/"
-#     DLL_DOWNLOAD_CUT_DIRS="3"
-# elif [ "$CROSS_SUFFIX" = "w64" ]; then
-#     DLL_DOWNLOAD_DIR="./dll/w64"
-#     DLL_DOWNLOAD_URL="https://qemu.weilnetz.de/w64/old/dll/"
-#     DLL_DOWNLOAD_CUT_DIRS="3"
-# fi
-
-# if [ ! -z "${DLL_DOWNLOAD_URL}" ]; then
-#     mkdir -p "${DLL_DOWNLOAD_DIR}"
-#     pushd "${DLL_DOWNLOAD_DIR}"
-#     wget --recursive --no-parent --no-host-directories --continue --cut-dirs ${DLL_DOWNLOAD_CUT_DIRS} --accept "*.dll" --reject "index.html*" --level 1 "${DLL_DOWNLOAD_URL}"
-#     popd
-# fi
-
-# new approach: get from MingW packages
+# collect Win32 and Win64 dlls
 mkdir -p ./dll/w32 ./dll/w64
 IFS="," for name in "${DLL_LIST}"; do
     cp -v "/usr/i686-w64-mingw32/sys-root/mingw/bin/${name}.dll" "./dll/w32/"
