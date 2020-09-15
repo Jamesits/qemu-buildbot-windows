@@ -28,12 +28,10 @@ git checkout "${SOURCE_GIT_REF}"
 # put Win32 and Win64 dlls
 DLL_DOWNLOAD_URL=""
 
-if [[ "$CROSS_SUFFIX" -eq "w32" ]]; then
+if [ "$CROSS_SUFFIX" = "w32" ]; then
     DLL_DOWNLOAD_DIR="./dll/w32"
     DLL_DOWNLOAD_URL="https://qemu.weilnetz.de/w32/old/dll/"
-fi
-
-if [[ "$CROSS_SUFFIX" -eq "w64" ]]; then
+elif [ "$CROSS_SUFFIX" = "w64" ]; then
     DLL_DOWNLOAD_DIR="./dll/w64"
     DLL_DOWNLOAD_URL="https://qemu.weilnetz.de/w64/old/dll/"
 fi
