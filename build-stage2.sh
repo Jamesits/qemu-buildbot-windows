@@ -36,6 +36,9 @@ for name in ${DLL_LIST//,/ }; do
     cp -v "/usr/x86_64-w64-mingw32/sys-root/mingw/bin/${name}.dll" "./dll/w64/"
 done
 
+cp -v "/usr/lib/gcc/i686-w64-mingw32/6.3-win32/libgcc_s_sjlj-1.dll" "./dll/w32/"
+cp -v "/usr/lib/gcc/i686-w64-mingw32/6.3-win32/libgcc_s_sjlj-1.dll" "./dll/w64/"
+
 popd
 
 # end get sources
