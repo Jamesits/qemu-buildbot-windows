@@ -10,7 +10,7 @@ DEFAULT_TARGET_LIST="aarch64-softmmu,alpha-softmmu,arm-softmmu,cris-softmmu,hppa
 DEFAULT_DLL_LIST="iconv,libatk-1.0-0,libbz2-1,libcairo-2,libcairo-gobject-2,libcurl-4,libeay32,libepoxy-0,libexpat-1,libffi-6,libfontconfig-1,libfreetype-6,libgdk-3-0,libgdk_pixbuf-2.0-0,libgio-2.0-0,libglib-2.0-0,libgmodule-2.0-0,libgmp-10,libgnutls-30,libgobject-2.0-0,libgtk-3-0,libharfbuzz-0,libhogweed-4,libidn2-0,libintl-8,libjpeg-8,liblzo2-2,libncursesw6,libnettle-6,libnghttp2-14,libp11-kit-0,libpango-1.0-0,libpangocairo-1.0-0,libpangoft2-1.0-0,libpangowin32-1.0-0,libpcre-1,libpixman-1-0,libpng16-16,libssh2-1,libtasn1-6,libunistring-2,libusb-1.0,libusbredirparser-1,SDL2,ssleay32,zlib1"
 DEFAULT_DLL_LIST_GCC="libssp-0,libstdc++-6"
 DEFAULT_DLL_LIST_GCC_W32ONLY="libgcc_s_sjlj-1"
-DEFAULT_DLL_LIST_LIB="libwinpthread-1.dll"
+DEFAULT_DLL_LIST_LIB="libwinpthread-1"
 
 SOURCE_BASE_DIR="${SOURCE_BASE_DIR:-${HOME}}"
 SOURCE_GIT_URL="${SOURCE_GIT_URL:-https://github.com/qemu/qemu}"
