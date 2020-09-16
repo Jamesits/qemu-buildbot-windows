@@ -16,7 +16,7 @@ apt-get install -y gnupg2 curl ca-certificates apt-transport-https
 # add Debian buster repo for nsis v3
 echo "deb http://deb.debian.org/debian buster main" > /etc/apt/sources.list.d/buster.list
 cat > /etc/apt/preferences.d/buster <<EOF
-Package: nsis
+Package: nsis nsis-common
 Pin: release n=buster
 Pin-Priority: 1000
 
