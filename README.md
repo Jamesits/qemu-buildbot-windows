@@ -1,4 +1,4 @@
-# QEMU builtbot
+# QEMU buildbot
 
 Builds QEMU for Windows. 
 
