@@ -45,7 +45,15 @@ else
 fi
 
 pushd qemu
+git reset --hard
 git checkout "${SOURCE_GIT_REF}"
+
+# changes to the qemu.nsi file:
+# * added qemu-edid.exe and qemu-ga.exe
+# * added some ROMs
+# * added icon files and necessary GTK theme files
+# * MUI and Unicode support
+wget "https://repo.or.cz/qemu/ar7.git/blob_plain/HEAD:/qemu.nsi" -O qemu.nsi
 
 # collect Win32 and Win64 dlls
 mkdir -p ./dll/w32 ./dll/w64
@@ -97,7 +105,7 @@ ${SOURCE_BASE_DIR}/qemu/configure --cross-prefix="${CROSS_PREFIX}" \
     --enable-gtk --enable-sdl --enable-hax \
     --target-list="${TARGET_LIST}"
 
-make all ${MAKE_FLAGS} V=1 CFLAGS="-Wno-redundant-decls"
+make all qemu-edid.exe qemu-ga.exe ${MAKE_FLAGS} V=1 CFLAGS="-Wno-redundant-decls"
 # if SIGNCODE is defined, it will be used to sign all the executables and the installer
 make installer INSTALLER="qemu-setup-${CROSS_SUFFIX}-${DATE}.exe" # SIGNCODE=signcode
 
