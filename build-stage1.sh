@@ -12,8 +12,12 @@ export DEBIAN_FRONTEND="noninteractive"
 
 apt-get update -y
 apt-get install -y gnupg2 curl ca-certificates apt-transport-https
+
+# add apt repository for mingw-* packages
+# mingw-* packages are converted using https://github.com/stweil/cyg2deb/
 curl -s https://qemu.weilnetz.de/debian/gpg.key | apt-key add -
 echo "deb https://qemu.weilnetz.de/debian/ testing contrib" > /etc/apt/sources.list.d/cygwin.list
+
 apt-get update -y
 apt-get install -y git build-essential bison flex nsis texinfo gettext wget \
     python3 python3-pip \
@@ -21,5 +25,6 @@ apt-get install -y git build-essential bison flex nsis texinfo gettext wget \
     g++-mingw-w64 mingw-w64 mingw-w64-tools \
     mingw-w64-i686-dev mingw64-i686-glib2.0 mingw64-i686-pixman mingw64-i686-curl mingw64-i686-gtk3 mingw64-i686-libssh2 mingw64-i686-libtasn1 mingw64-i686-nettle mingw64-i686-ncurses mingw64-i686-gnutls mingw64-i686-sdl2 mingw64-i686-libgcrypt mingw64-i686-libusb1.0 mingw64-i686-usbredir \
     mingw-w64-x86-64-dev mingw64-x86-64-glib2.0 mingw64-x86-64-pixman mingw64-x86-64-curl mingw64-x86-64-gtk3 mingw64-x86-64-libssh2 mingw64-x86-64-libtasn1 mingw64-x86-64-nettle mingw64-x86-64-ncurses mingw64-x86-64-gnutls mingw64-x86-64-sdl2 mingw64-x86-64-libgcrypt mingw64-x86-64-libusb1.0 mingw64-x86-64-usbredir
-# python3-sphinx is too old
+
+# python3-sphinx packaged by Debian 9 is too old
 pip3 install git+https://github.com/sphinx-doc/sphinx
