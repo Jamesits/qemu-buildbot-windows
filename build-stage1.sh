@@ -13,6 +13,18 @@ export DEBIAN_FRONTEND="noninteractive"
 apt-get update -y
 apt-get install -y gnupg2 curl ca-certificates apt-transport-https
 
+# add Debian buster repo for nsis v3
+echo "deb http://deb.debian.org/debian buster main" > /etc/apt/sources.list.d/buster.list
+cat > /etc/apt/preferences.d/buster <<EOF
+Package: nsis
+Pin: release n=buster
+Pin-Priority: 1000
+
+Package: *
+Pin: release n=buster
+Pin-Priority: 50
+EOF
+
 # add apt repository for mingw-* packages
 # mingw-* packages are converted using https://github.com/stweil/cyg2deb/
 curl -s https://qemu.weilnetz.de/debian/gpg.key | apt-key add -
