@@ -10,6 +10,7 @@ DEFAULT_TARGET_LIST="aarch64-softmmu,alpha-softmmu,arm-softmmu,cris-softmmu,hppa
 DEFAULT_DLL_LIST="iconv,libatk-1.0-0,libbz2-1,libcairo-2,libcairo-gobject-2,libcurl-4,libeay32,libepoxy-0,libexpat-1,libffi-6,libfontconfig-1,libfreetype-6,libgdk-3-0,libgdk_pixbuf-2.0-0,libgio-2.0-0,libglib-2.0-0,libgmodule-2.0-0,libgmp-10,libgnutls-30,libgobject-2.0-0,libgtk-3-0,libharfbuzz-0,libhogweed-4,libidn2-0,libintl-8,libjpeg-8,liblzo2-2,libncursesw6,libnettle-6,libnghttp2-14,libp11-kit-0,libpango-1.0-0,libpangocairo-1.0-0,libpangoft2-1.0-0,libpangowin32-1.0-0,libpcre-1,libpixman-1-0,libpng16-16,libssh2-1,libtasn1-6,libunistring-2,libusb-1.0,libusbredirparser-1,SDL2,ssleay32,zlib1"
 DEFAULT_DLL_LIST_GCC="libssp-0,libstdc++-6"
 DEFAULT_DLL_LIST_GCC_W32ONLY="libgcc_s_sjlj-1"
+DEFAULT_DLL_LIST_GCC_W64ONLY="libgcc_s_seh-1"
 DEFAULT_DLL_LIST_LIB="libwinpthread-1"
 
 SOURCE_BASE_DIR="${SOURCE_BASE_DIR:-${HOME}}"
@@ -23,6 +24,7 @@ TARGET_LIST="${TARGET_LIST:-${DEFAULT_TARGET_LIST}}"
 DLL_LIST="${DLL_LIST:-${DEFAULT_DLL_LIST}}"
 DLL_LIST_GCC="${DLL_LIST_GCC:-${DEFAULT_DLL_LIST_GCC}}"
 DLL_LIST_GCC_W32ONLY="${DLL_LIST_GCC_W32ONLY:-${DEFAULT_DLL_LIST_GCC_W32ONLY}}"
+DLL_LIST_GCC_W64ONLY="${DLL_LIST_GCC_W64ONLY:=${DEFAULT_DLL_LIST_GCC_W64ONLY}}"
 DLL_LIST_LIB="${DLL_LIST_LIB:-${DEFAULT_DLL_LIST_LIB}}"
 MAKE_FLAGS="${MAKE_FLAGS:--j}" # note that -j might cause OOM (on a 32-core 128G server!)
 
@@ -59,6 +61,12 @@ done
 for name in ${DLL_LIST_GCC_W32ONLY//,/ }; do
     cp -v "/usr/lib/gcc/i686-w64-mingw32/6.3-posix/${name}.dll" "./dll/w32/"
     cp -v "/usr/lib/gcc/i686-w64-mingw32/6.3-posix/${name}.dll" "./dll/w64/"
+done
+
+# dlls provided by gcc-mingw-w64-x86_64 only
+for name in ${DLL_LIST_GCC_W64ONLY//,/ }; do
+    #　cp -v "/usr/lib/gcc/x86_64-w64-mingw32/6.3-posix/${name}.dll" "./dll/w32/"
+    cp -v "/usr/lib/gcc/x86_64-w64-mingw32/6.3-posix/${name}.dll" "./dll/w64/"
 done
 
 # dlls in the lib directory
