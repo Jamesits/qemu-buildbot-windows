@@ -57,13 +57,13 @@ for name in ${DLL_LIST_GCC//,/ }; do
     cp -v "/usr/lib/gcc/x86_64-w64-mingw32/6.3-posix/${name}.dll" "./dll/w64/"
 done
 
-# dlls provided by gcc-mingw-w64-i686 only
+# dlls provided by gcc-mingw-w64-i686 only, these work for both x86 and amd64
 for name in ${DLL_LIST_GCC_W32ONLY//,/ }; do
     cp -v "/usr/lib/gcc/i686-w64-mingw32/6.3-posix/${name}.dll" "./dll/w32/"
     cp -v "/usr/lib/gcc/i686-w64-mingw32/6.3-posix/${name}.dll" "./dll/w64/"
 done
 
-# dlls provided by gcc-mingw-w64-x86_64 only
+# dlls provided by gcc-mingw-w64-x86_64 only, these are only needed in the arm64 release
 for name in ${DLL_LIST_GCC_W64ONLY//,/ }; do
     #　cp -v "/usr/lib/gcc/x86_64-w64-mingw32/6.3-posix/${name}.dll" "./dll/w32/"
     cp -v "/usr/lib/gcc/x86_64-w64-mingw32/6.3-posix/${name}.dll" "./dll/w64/"
@@ -75,10 +75,9 @@ for name in ${DLL_LIST_LIB//,/ }; do
     cp -v "/usr/x86_64-w64-mingw32/lib/${name}.dll" "./dll/w64/"
 done
 
-
 popd
 
-# end get sources
+# end prepare sources
 popd
 
 # build
