@@ -19,6 +19,7 @@ DEFAULT_DLL_LIST_LIB="libwinpthread-1"
 SOURCE_BASE_DIR="${SOURCE_BASE_DIR:-${HOME}}"
 SOURCE_GIT_URL="${SOURCE_GIT_URL:-https://github.com/qemu/qemu}"
 SOURCE_GIT_REF="${SOURCE_GIT_REF:-master}"
+SOURCE_GIT_AR7_URL="${SOURCE_GIT_AR7_URL:-https://repo.or.cz/qemu/ar7.git}"
 BUILD_ARTIFACTS_DIR="${BUILD_ARTIFACTS_DIR:-/tmp/qemu-build}"
 CROSS_PREFIX="${CROSS_PREFIX:-x86_64-w64-mingw32-}"
 CROSS_SUFFIX="${CROSS_SUFFIX:-w64}" # w32 or w64 for Windows builds, only affects setup executable name
@@ -37,6 +38,13 @@ MAKE_FLAGS="${MAKE_FLAGS:--j}" # note that -j might cause OOM (on a 32-core 128G
 mkdir -p "${SOURCE_BASE_DIR}"
 pushd "${SOURCE_BASE_DIR}"
 
+if [ -d "./ar7/.git" ]; then
+    echo "WARNING: qemu-ar7 source exists, not cloning again"
+else
+    rm -rf ./ar7
+    git clone --depth 1 "${SOURCE_GIT_AR7_URL}" ar7
+fi
+
 if [ -d "./qemu/.git" ]; then
     echo "WARNING: qemu source exists, not cloning again"
 else
@@ -53,7 +61,7 @@ git checkout "${SOURCE_GIT_REF}"
 # * added some ROMs
 # * added icon files and necessary GTK theme files
 # * MUI and Unicode support
-wget "https://repo.or.cz/qemu/ar7.git/blob_plain/HEAD:/qemu.nsi" -O qemu.nsi
+cp -rv ../ar7/qemu.nsi ../ar7/installer .
 
 # collect Win32 and Win64 dlls
 mkdir -p ./dll/w32 ./dll/w64
