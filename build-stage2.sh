@@ -14,6 +14,7 @@ DEFAULT_DLL_LIST_GCC="libssp-0,libstdc++-6"
 DEFAULT_DLL_LIST_GCC_W32ONLY="libgcc_s_sjlj-1"
 DEFAULT_DLL_LIST_GCC_W64ONLY="libgcc_s_seh-1"
 DEFAULT_DLL_LIST_LIB="libwinpthread-1"
+DEFAULT_TRACE_BACKENDS="simple" # "log,simple"
 
 # script config variables
 SOURCE_BASE_DIR="${SOURCE_BASE_DIR:-${HOME}}"
@@ -28,8 +29,9 @@ TARGET_LIST="${TARGET_LIST:-${DEFAULT_TARGET_LIST}}"
 DLL_LIST="${DLL_LIST:-${DEFAULT_DLL_LIST}}"
 DLL_LIST_GCC="${DLL_LIST_GCC:-${DEFAULT_DLL_LIST_GCC}}"
 DLL_LIST_GCC_W32ONLY="${DLL_LIST_GCC_W32ONLY:-${DEFAULT_DLL_LIST_GCC_W32ONLY}}"
-DLL_LIST_GCC_W64ONLY="${DLL_LIST_GCC_W64ONLY:=${DEFAULT_DLL_LIST_GCC_W64ONLY}}"
+DLL_LIST_GCC_W64ONLY="${DLL_LIST_GCC_W64ONLY:-${DEFAULT_DLL_LIST_GCC_W64ONLY}}"
 DLL_LIST_LIB="${DLL_LIST_LIB:-${DEFAULT_DLL_LIST_LIB}}"
+TRACE_BACKENDS="${TRACE_BACKENDS:-${DEFAULT_TRACE_BACKENDS}}"
 MAKE_FLAGS="${MAKE_FLAGS:--j}" # note that -j might cause OOM (on a 32-core 128G server!)
 
 # ==========================================================================================
@@ -107,7 +109,7 @@ mkdir -p "${BUILD_ARTIFACTS_DIR}"
 pushd "${BUILD_ARTIFACTS_DIR}"
 
 ${SOURCE_BASE_DIR}/qemu/configure --cross-prefix="${CROSS_PREFIX}" \
-    --disable-werror --enable-trace-backends=log,simple --enable-debug \
+    --disable-werror --enable-trace-backends="${TRACE_BACKENDS}" --enable-debug \
     --enable-gnutls --enable-nettle --enable-curl --enable-vnc \
     --enable-bzip2 --enable-guest-agent --enable-docs \
     --enable-gtk --enable-sdl --enable-hax \
