@@ -14,7 +14,6 @@ DEFAULT_DLL_LIST_GCC="libssp-0,libstdc++-6"
 DEFAULT_DLL_LIST_GCC_W32ONLY="libgcc_s_sjlj-1"
 DEFAULT_DLL_LIST_GCC_W64ONLY="libgcc_s_seh-1"
 DEFAULT_DLL_LIST_LIB="libwinpthread-1"
-DEFAULT_TRACE_BACKENDS="log" # "log,simple"
 
 # script config variables
 SOURCE_BASE_DIR="${SOURCE_BASE_DIR:-${HOME}}"
@@ -31,7 +30,6 @@ DLL_LIST_GCC="${DLL_LIST_GCC:-${DEFAULT_DLL_LIST_GCC}}"
 DLL_LIST_GCC_W32ONLY="${DLL_LIST_GCC_W32ONLY:-${DEFAULT_DLL_LIST_GCC_W32ONLY}}"
 DLL_LIST_GCC_W64ONLY="${DLL_LIST_GCC_W64ONLY:-${DEFAULT_DLL_LIST_GCC_W64ONLY}}"
 DLL_LIST_LIB="${DLL_LIST_LIB:-${DEFAULT_DLL_LIST_LIB}}"
-TRACE_BACKENDS="${TRACE_BACKENDS:-${DEFAULT_TRACE_BACKENDS}}"
 MAKE_FLAGS="${MAKE_FLAGS:--j}" # note that -j might cause OOM (on a 32-core 128G server!)
 
 # ==========================================================================================
@@ -40,18 +38,24 @@ MAKE_FLAGS="${MAKE_FLAGS:--j}" # note that -j might cause OOM (on a 32-core 128G
 mkdir -p "${SOURCE_BASE_DIR}"
 pushd "${SOURCE_BASE_DIR}"
 
-if [ -d "./ar7/.git" ]; then
-    echo "WARNING: qemu-ar7 source exists, not cloning again"
-else
-    rm -rf ./ar7
-    git clone --depth 1 "${SOURCE_GIT_AR7_URL}" ar7
-fi
-
 if [ -d "./qemu/.git" ]; then
-    echo "WARNING: qemu source exists, not cloning again"
+    echo "INFO: qemu source exists, not cloning again"
+    pushd qemu
+    git pull
+    popd
 else
     rm -rf ./qemu
-    git clone "${SOURCE_GIT_URL}" qemu # the configure script will init the submodules, no need to do recursive here
+    git clone --reference-if-able "${SOURCE_GIT_AR7_URL}" "${SOURCE_GIT_URL}" qemu # the configure script will init the submodules, no need to do recursive here
+fi
+
+if [ -d "./ar7/.git" ]; then
+    echo "INFO: qemu-ar7 source exists, not cloning again"
+    pushd qemu
+    git pull
+    popd
+else
+    rm -rf ./ar7
+    git clone --depth 1 --reference-if-able "${SOURCE_GIT_URL}" "${SOURCE_GIT_AR7_URL}" ar7
 fi
 
 pushd qemu
@@ -64,6 +68,9 @@ git checkout "${SOURCE_GIT_REF}"
 # * added icon files and necessary GTK theme files
 # * MUI and Unicode support
 cp -rv ../ar7/qemu.nsi ../ar7/installer .
+
+# save installer artifacts
+sed -ie 's/rm -r $\{INSTDIR\}//g' Makefile
 
 # collect Win32 and Win64 dlls
 mkdir -p ./dll/w32 ./dll/w64
@@ -109,7 +116,7 @@ mkdir -p "${BUILD_ARTIFACTS_DIR}"
 pushd "${BUILD_ARTIFACTS_DIR}"
 
 ${SOURCE_BASE_DIR}/qemu/configure --cross-prefix="${CROSS_PREFIX}" \
-    --disable-werror --enable-trace-backends="${TRACE_BACKENDS}" --enable-debug \
+    --disable-werror --enable-trace-backends=log,simple --enable-debug \
     --enable-gnutls --enable-nettle --enable-curl --enable-vnc \
     --enable-bzip2 --enable-guest-agent --enable-docs \
     --enable-gtk --enable-sdl --enable-hax \
