@@ -51,7 +51,8 @@ jobs:
 
     - bash: |
         cp -v /tmp/qemu-build/qemu-setup-*.exe "${BUILD_ARTIFACTSTAGINGDIRECTORY}"
-        tar -cvzf "${BUILD_ARTIFACTSTAGINGDIRECTORY}/artifacts.tar.gz" /tmp/qemu-build
+        tar -cvJf "${BUILD_ARTIFACTSTAGINGDIRECTORY}/artifacts.tar.xz" /tmp/qemu-build
+        tar -cvJf "${BUILD_ARTIFACTSTAGINGDIRECTORY}/installer.tar.xz" /tmp/qemu-nsis
       displayName: 'copy artifacts'
 
     - task: PublishBuildArtifacts@1
