@@ -45,7 +45,7 @@ if [ -d "./qemu/.git" ]; then
     popd
 else
     rm -rf ./qemu
-    git clone --reference-if-able "${SOURCE_GIT_AR7_URL}" "${SOURCE_GIT_URL}" qemu # the configure script will init the submodules, no need to do recursive here
+    git clone --reference-if-able "${SOURCE_BASE_DIR}/ar7" "${SOURCE_GIT_URL}" qemu # the configure script will init the submodules, no need to do recursive here
 fi
 
 if [ -d "./ar7/.git" ]; then
@@ -55,7 +55,7 @@ if [ -d "./ar7/.git" ]; then
     popd
 else
     rm -rf ./ar7
-    git clone --depth 1 --reference-if-able "${SOURCE_GIT_URL}" "${SOURCE_GIT_AR7_URL}" ar7
+    git clone --depth 1 --reference-if-able "${SOURCE_BASE_DIR}/qemu" "${SOURCE_GIT_AR7_URL}" ar7
 fi
 
 pushd qemu
@@ -70,7 +70,7 @@ git checkout "${SOURCE_GIT_REF}"
 cp -rv ../ar7/qemu.nsi ../ar7/installer .
 
 # save installer artifacts
-sed -ie 's/rm -r $\{INSTDIR\}//g' Makefile
+sed -ie 's/rm -r ${INSTDIR}//g' Makefile
 
 # collect Win32 and Win64 dlls
 mkdir -p ./dll/w32 ./dll/w64
