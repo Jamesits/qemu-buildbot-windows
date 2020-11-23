@@ -14,7 +14,7 @@ DEFAULT_DLL_LIST_GCC="libssp-0,libstdc++-6"
 DEFAULT_DLL_LIST_GCC_W32ONLY="libgcc_s_sjlj-1"
 DEFAULT_DLL_LIST_GCC_W64ONLY="libgcc_s_seh-1"
 DEFAULT_DLL_LIST_LIB="libwinpthread-1"
-DEFAULT_TRACE_BACKENDS="simple" # "log,simple"
+DEFAULT_TRACE_BACKENDS="log" # "log,simple"
 
 # script config variables
 SOURCE_BASE_DIR="${SOURCE_BASE_DIR:-${HOME}}"
