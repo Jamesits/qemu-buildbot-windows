@@ -111,7 +111,7 @@ popd
 popd
 
 # build
-rm -rf "${BUILD_ARTIFACTS_DIR}"
+rm -rf -- "${BUILD_ARTIFACTS_DIR}"/*
 mkdir -p "${BUILD_ARTIFACTS_DIR}"
 pushd "${BUILD_ARTIFACTS_DIR}"
 
