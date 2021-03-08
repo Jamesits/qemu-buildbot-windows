@@ -36,8 +36,7 @@ apt-get install -y git build-essential bison flex nsis texinfo gettext wget \
     python3 python3-pip \
     mingw64-i686-adwaita-icon-theme mingw64-x86-64-adwaita-icon-theme mingw64-i686-hicolor-icon-theme mingw64-x86-64-hicolor-icon-theme \
     g++-mingw-w64 mingw-w64 mingw-w64-tools \
-    mingw-w64-i686-dev mingw64-i686-glib2.0 mingw64-i686-pixman mingw64-i686-curl mingw64-i686-gtk3 mingw64-i686-libssh2 mingw64-i686-libtasn1 mingw64-i686-nettle mingw64-i686-ncurses mingw64-i686-gnutls mingw64-i686-sdl2 mingw64-i686-libgcrypt mingw64-i686-libusb1.0 mingw64-i686-usbredir \
-    mingw-w64-x86-64-dev mingw64-x86-64-glib2.0 mingw64-x86-64-pixman mingw64-x86-64-curl mingw64-x86-64-gtk3 mingw64-x86-64-libssh2 mingw64-x86-64-libtasn1 mingw64-x86-64-nettle mingw64-x86-64-ncurses mingw64-x86-64-gnutls mingw64-x86-64-sdl2 mingw64-x86-64-libgcrypt mingw64-x86-64-libusb1.0 mingw64-x86-64-usbredir
-
+    mingw-w64-i686-dev mingw64-i686-glib2.0 mingw64-i686-pixman mingw64-i686-curl mingw64-i686-gtk3 mingw64-i686-libssh2 mingw64-i686-libtasn1 mingw64-i686-nettle mingw64-i686-ncurses mingw64-i686-gnutls mingw64-i686-sdl2 mingw64-i686-libgcrypt mingw64-i686-libusb1.0 mingw64-i686-usbredir mingw64-i686-openssl \
+    mingw-w64-x86-64-dev mingw64-x86-64-glib2.0 mingw64-x86-64-pixman mingw64-x86-64-curl mingw64-x86-64-gtk3 mingw64-x86-64-libssh2 mingw64-x86-64-libtasn1 mingw64-x86-64-nettle mingw64-x86-64-ncurses mingw64-x86-64-gnutls mingw64-x86-64-sdl2 mingw64-x86-64-libgcrypt mingw64-x86-64-libusb1.0 mingw64-x86-64-usbredir mingw64-x86-64-openssl
 # python3-sphinx packaged by Debian 9 is too old
 pip3 install git+https://github.com/sphinx-doc/sphinx
