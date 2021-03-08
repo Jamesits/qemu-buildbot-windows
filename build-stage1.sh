@@ -28,6 +28,7 @@ EOF
 # add apt repository for mingw-* packages
 # mingw-* packages are converted using https://github.com/stweil/cyg2deb/
 curl -s https://qemu.weilnetz.de/debian/gpg.key | apt-key add -
+curl -s https://qemu.weilnetz.de/debian/weilnetz.gpg | apt-key add -
 echo "deb https://qemu.weilnetz.de/debian/ testing contrib" > /etc/apt/sources.list.d/cygwin.list
 
 apt-get update -y
